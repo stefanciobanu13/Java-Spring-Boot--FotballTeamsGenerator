@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Players of the round</title>
+
+  <link th:href="@{/css/tablesDisplay.css}" rel="stylesheet" />
+  <link th:href="@{/css/defaultpage.css}" rel="stylesheet" />
+
+
+</head>
+<body>
+<h2> The Teams line-ups</h2>
+<br>
+<br>
+<br>
+<div id="container"style="display: flex;">
+
+    <!-- put new button: Add Customer  -->
+    <div class="table-wrapper">
+    <h3 id="greenName">Team Green:</h3>
+    <h3>Team value: <span th:text="${teamGreen.teamValue}"/></h3>
+    <br>
+    <table id="team1" class="teamT" style="flex: 1;" >
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamGreen.ThePlayers}">
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+    <br>
+    <div class="table-wrapper">
+    <h3 id="orangeName">Team Orange:</h3>
+    <h3>Team value: <span th:text="${teamOrange.teamValue}"/></h3>
+    <br>
+    <table id="team2"class="teamT"style="flex: 1;">
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamOrange.ThePlayers}">
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+    </table>
+        </div>
+
+
+
+    <br>
+    <div class="table-wrapper">
+
+    <h3 id="blueName">Team Blue:</h3>
+    <h3>Team value: <span th:text="${teamBlue.teamValue}"/></h3>
+    <br>
+    <table id="team3"class="teamT"style="flex: 1;">
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamBlue.ThePlayers}">
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+
+    </table>
+    </div>
+
+
+    <div class="table-wrapper">
+    <h3 id="grayName">Team Gray:</h3>
+    <h3>Team value: <span th:text="${teamGray.teamValue}"/></h3>
+    <br>
+
+    <table id="team4"class="teamT"style="flex: 1;">
+      <thead>
+      <tr>
+        <th>  </th>
+        <th>  </th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamGray.ThePlayers}">
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+    </table>
+    </div>
+</div>
+<br>
+<br>
+
+<form th:action="@{/startGame}" method="get">
+    <label for="dateInput">Enter date:</label>
+    <input type="text" id="dateInput" name="date" />
+    <br>
+    <br>
+
+    <label for="roundNumber">Round number:</label>
+    <input type="text" id="roundNumber" name="number" />
+    <br>
+    <br>
+    <button id="saveIt" type="submit">START GAME</button>
+</form>
+
+
+<br>
+<br>
+<br>
+
+
+</body>
+
+</html>
+
+

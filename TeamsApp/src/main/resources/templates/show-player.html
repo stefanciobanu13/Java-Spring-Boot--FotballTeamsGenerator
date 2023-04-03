@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <link th:href="@{/css/style.css}" rel="stylesheet" />
+  <link th:href="@{/css/defaultpage.css}" rel="stylesheet" />
+
+
+  <title>Players List</title>
+</head>
+
+<body>
+
+<!-- the logout link-->
+<a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"class="logout-link">
+  Logout
+</a>
+<form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
+
+
+<div id="weapper">
+  <div id="header">
+    <h2>Players List</h2>
+  </div>
+</div>
+<div id="container">
+  <div id="content">
+    <form action="/submitAttendance" method="post">
+      <!-- add our HTML table here -->
+      <table>
+        <tr>
+          <th>Nr.</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Grade</th>
+          <th>Attend</th>
+        </tr>
+        <!-- loop over and print out players -->
+        <tr th:each="player : ${thePlayers}">
+          <td th:text="${player.id}"></td>
+          <td th:text="${player.firstName}"></td>
+          <td th:text="${player.lastName}"></td>
+          <td th:text="${player.grade}"></td>
+          <td><input type="checkbox" name="selectedPlayers" th:value="${player.id}" /></td>
+        </tr>
+      </table>
+      <br/><br/>
+      <input id="submitIt" type="submit" value="Submit"/>
+    </form>
+  </div>
+</div>
+<br/>
+<a href="/showFormForAdd">Back</a>
+<br/>
+</body>
+</html>

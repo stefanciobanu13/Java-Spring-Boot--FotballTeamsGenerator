@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Team Application</title>
+
+    <link rel="stylesheet" th:href="@{/css/defaultpage.css}" />
+
+
+
+
+
+</head>
+
+
+<body>
+
+<!-- the logout link -->
+<a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"class="logout-link">
+    Logout
+</a>
+<form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
+
+
+
+<h2 id="title">The TeamsExplorer App</h2>
+<hr />
+
+<p>
+    Welcome to the Home Page!
+
+</p>
+
+<!-- put new button: Add Player  -->
+<input type="button" id="start" value="START"
+       onclick="window.location.href='showFormForAdd';return false"
+       class="add-button" />
+
+
+</body>
+</html>

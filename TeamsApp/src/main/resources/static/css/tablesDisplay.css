@@ -1,0 +1,76 @@
+#team1{
+    background-color: lawngreen;
+    font-weight: bold;
+    text-align: left;
+}
+
+#team2{
+    background-color: orange;
+    font-weight: bold;
+}
+
+#team3{
+    font-weight: bold;
+    background-color: dodgerblue;
+}
+
+#team4{
+    font-weight: bold;
+    background-color: darkgray;
+    margin: auto;
+}
+
+.teamT{
+    width: 300px;
+    margin: auto;
+}
+
+
+table, td, th {
+    border: 3px solid black;
+    padding: 5px;
+    border-collapse: collapse;
+    color: black;
+    font-size: medium;
+}
+
+.table-wrapper {
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    width: 25%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.table-wrapper table {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+    padding: 10px;
+    border: 1px solid black;
+}
+
+#greenName{
+    color: lawngreen;
+    font-size: 30px;
+}
+#orangeName{
+    color: orange;
+    font-size: 30px;
+}
+#blueName{
+    color:dodgerblue;
+    font-size: 30px;
+}
+#grayName{
+    color: darkgray;
+    font-size: 30px;
+}
+
+h3{
+    font-size:  15px;
+}

@@ -1,0 +1,95 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+
+	<title> Save Player </title>
+
+	<link th:href="@{/css/page.css}" rel="stylesheet" />
+
+</head>
+
+<body>
+
+<!-- the logout link-->
+<a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"class="logout-link">
+	Logout
+</a>
+<form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
+
+
+<h2> Add Players to Database</h2>
+
+<br>
+<br>
+
+<form th:object="${player}" th:action="@{/savePlayer}" method="post">
+
+	<div id="put-input">
+		<tr>
+			<td><label>Id:</label></td>
+			<td><input type="text" th:field="*{id}" /></td>
+		</tr>
+
+		<tr>
+			<td><label>First name:</label></td>
+			<td><input type="text" th:field="*{firstName}"th:id="firstName" /></td>
+		</tr>
+
+
+		<tr>
+			<td><label>Last name:</label></td>
+			<td><input type="text" th:field="*{lastName}"th:id="lastName" /></td>
+		</tr>
+
+		<tr>
+			<td><label>Grade:</label></td>
+			<td><input type="text" th:field="*{grade}" th:id="grade" /></td>
+		</tr>
+
+		<br>
+		<br>
+		<button id="savePlayer" type="submit">Save Player</button>
+		<tr>
+			<br>
+			<br>
+			<br>
+			<br>
+
+		</tr>
+		<br>
+
+		<br>
+	</div>
+
+
+	<!-- put new button: Show Players  -->
+	<div id="click-buttons"><input id="showPlayers" type = "button" value="Show Players"
+								   onclick="window.location.href= 'showPlayers';return false"
+								   class = "add-button"
+	/>
+
+		<input id="showDbPlayers" type = "button" value="Show Database Players"
+			   onclick="window.location.href= 'showDbPlayers';return false"
+			   class = "add-button"
+		/>
+	</div>
+
+</form>
+
+<br>
+<br>
+<p>
+
+	<a href="/home">Back to Home Page </a>
+
+</p>
+
+</body>
+
+</html>

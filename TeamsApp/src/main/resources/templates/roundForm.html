@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:util="urn:thymeleaf-util">
+<head>
+  <title>Players of the round</title>
+
+  <link th:href="@{/css/matchRound.css}" rel="stylesheet" />
+  <link th:href="@{/css/tablesDisplay.css}" rel="stylesheet" />
+  <link th:href="@{/css/colorTheTables.css}" rel="stylesheet" />
+
+
+
+
+</head>
+<body>
+<br>
+<div id="theRoundDetails"style="display: flex;">
+  <span><h2> Championship</h2></span>
+  <br>
+  <h2> Round <span th:text="${currentGame.round.number}"  ></span></h2>
+</div>
+
+
+
+<br>
+<br>
+<br>
+
+<div id="container"style="display: flex;">
+
+  <!-- put new button: Add Customer  -->
+  <div class="table-wrapper">
+
+    <table id="team1" class="teamT" style="flex: 1;" >
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamGreen.thePlayers}">
+        <td th:text="${tempPlayer.id}"></td>
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <br>
+  <div class="table-wrapper">
+
+    <table id="team2"class="teamT"style="flex: 1;">
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamOrange.thePlayers}">
+        <td th:text="${tempPlayer.id}"></td>
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <div class="table-wrapper">
+
+    <table id="team3"class="teamT"style="flex: 1;">
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamBlue.thePlayers}">
+        <td th:text="${tempPlayer.id}"></td>
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+
+  <div class="table-wrapper">
+    <table id="team4"class="teamT"style="flex: 1;">
+      <thead>
+      <tr>
+        <th>  </th>
+        <th>  </th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tempPlayer : ${teamGray.thePlayers}">
+        <td th:text="${tempPlayer.id}"></td>
+        <td th:text="${tempPlayer.firstName}"></td>
+        <td th:text="${tempPlayer.lastName}"></td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<br>
+
+
+<div class="table-wrapper">
+  <table class="teamT">
+    <thead>
+    <tr>
+      <th> Position </th>
+      <th> Points </th>
+      <th> Goals scored </th>
+      <th> Goals received </th>
+      <th>  </th>
+
+
+    </tr>
+    </thead>
+
+    <tr >
+      <td>1st <span th:text="${p1.getColor()}"></span></td>
+      <td> <span th:text="${p1.getPoints()}"></span></td>
+      <td><span th:text="${p1.getScoredGoals()}"></span> </td>
+      <td><span th:text="${p1.getGoalsReceived()}"></span> </td>
+      <td><span th:text="${p1.getGoalsSituation()}"></span> </td>
+    </tr>
+    <tr>
+      <td>2nd <span th:text="${p2.getColor()}"></span></td>
+      <td> <span th:text="${p2.getPoints()}"></span></td>
+      <td><span th:text="${p2.getScoredGoals()}"></span></td>
+      <td><span th:text="${p2.getGoalsReceived()}"></span> </td>
+      <td><span th:text="${p2.getGoalsSituation()}"></span> </td>
+    </tr>
+
+    <tr>
+      <td>3rd <span th:text="${p3.getColor()}"></span></td>
+      <td> <span th:text="${p3.getPoints()}"></span></td>
+      <td><span th:text="${p3.getScoredGoals()}"></span></td>
+      <td><span th:text="${p3.getGoalsReceived()}"></span> </td>
+      <td><span th:text="${p3.getGoalsSituation()}"></span> </td>
+    </tr>
+
+    <tr>
+      <td>4th <span th:text="${p4.getColor()}"></span></td>
+      <td> <span th:text="${p4.getPoints()}"></span></td>
+      <td><span th:text="${p4.getScoredGoals()}"></span></td>
+      <td><span th:text="${p4.getGoalsReceived()}"></span> </td>
+      <td><span th:text="${p4.getGoalsSituation()}"></span> </td>
+    </tr>
+
+  </table>
+</div>
+
+<br>
+<br>
+<br>
+
+
+<div id="fixtures"style="display: flex;">
+
+  <ul id="noBullet">
+    <li><h2>Match fixtures</h2></li>
+    <li> 1.  Green vs Orange</li>
+    <li> 2.  Blue vs Gray</li>
+    <li> 3.  Orange vs Blue</li>
+    <li> 4.  Gray vs Green<li>
+    <li> 5.  Green vs Blue</li>
+    <li> 6.  Orange vs Gray</li>
+    <li> 7.  Blue vs Green</li>
+    <li> 8.  Gray vs Orange</li>
+    <li> 9.  Green vs Gray</li>
+    <li> 10.  Blue vs Orange</li>
+    <li> 11. Green vs Orange</li>
+    <li> 12. Gray vs Blue</li>
+  </ul>
+</div>
+<br>
+<br>
+
+
+<table class="matchTable">
+  <thead>
+  <tr>
+    <th style="width: 30%">Scorers:</th>
+    <th></th>
+    <th></th>
+    <th style="width: 30%">Scorers:</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>-</td>
+    <td rowspan="3" th:text="${currentGame.team1.color}" id="team1Name"></td>
+    <td rowspan="3" th:text="${currentGame.team2.color}"id="team2Name"></td>
+
+    <td></tr>
+  <tr>
+    <td>-</td>
+    <td>-</td>
+
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>-</td>
+    <td rowspan="3"  th:text="${currentGame.score_team1}" id="t1Score" ></td>
+    <td rowspan="3"  th:text="${currentGame.score_team2}" id="t2Score"> </td>
+
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>-</td>
+
+
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+
+  </tbody>
+</table>
+
+<br>
+<br>
+
+<div id="goalsForm">
+  <div id="goalT1" style="display: flex;">
+    <form  th:action="@{/goalTeam1}" method="post">
+
+      <label for="scorerIdT2">Team1 Player id:</label>
+      <br>
+      <br>
+      <input type="text" th:name="scorerId"  id="scorerIdT1"/>
+      <br>
+
+      <input id="saveIt" type="submit" value="GOAL"/>
+
+    </form></div>
+
+  <div id="goalT2" style="display: flex;">
+    <form  th:action="@{/goalTeam2}" method="post">
+
+      <label for="scorerIdT2">Team2 Player id:</label>
+      <br>
+      <br>
+      <input type="text" th:name="scorerId" id="scorerIdT2"/>
+      <br>
+
+      <input id="save" type="submit" value="GOAL"/>
+
+    </form>
+  </div>
+</div>
+
+<br>
+<br>
+<br><br>
+<br>
+<br>
+
+<div class="containerDiv">
+
+  <form th:action="@{/nextGame}" method="get">
+    <button id="nextGame" type="submit">Next Game</button>
+  </form>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+
+
+</body>
+
+</html>
+
+

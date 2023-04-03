@@ -1,0 +1,213 @@
+
+title{
+    align-content: center;
+}
+
+#titlePage{
+    align-content: center;
+}
+
+table{
+
+    counter-reset: row-number;
+    width: 60%;
+    height: 250px;
+    font-size: 8px;
+    padding: 20px 30px 20px 30px;
+}
+
+
+#greenTable{
+
+    background-color: lawngreen;
+    font-weight: bold;
+}
+
+#orangeTable{
+
+    background-color: orange;
+    font-weight: bold;
+}
+
+#blueTable{
+
+    background-color: dodgerblue;
+    font-weight: bold;
+}
+
+#grayTable{
+
+    background-color: darkgray;
+    font-weight: bold;
+}
+
+.row-number:before {
+    counter-increment: row-number;
+    content: counter(row-number);
+}
+
+td.row-number:before {
+    counter-increment: row-number;
+    content: counter(row-number);
+    padding-right: 5px; /* add space between the number and the text */
+    text-align: left;
+}
+
+th{
+    color: white;
+}
+
+
+.bigger{
+    font-size: 30px;
+}
+
+.dropDownList{
+    width: 100%;
+    font-weight: bold;
+}
+
+td{
+    width: 20px;
+
+
+}
+
+/* eliminate the bullet point of the list */
+#noBullet{
+
+    list-style: none;
+    margin: auto;
+}
+
+#fixtures{
+    margin: auto;
+    font-weight: bold;
+
+}
+
+.matchTable{
+    margin: auto;
+    font-weight: bold;
+    font-size: 9px;
+}
+
+.teamScore{
+    font-size: 20px;
+    text-align: center;
+    margin: auto;
+
+}
+
+.matchTable td, th {
+    border: 2px solid black;
+    font-size: 13px;
+    width: 15px;
+    color: black;
+    font-weight: bold;
+    padding: 18px;
+}
+
+
+#team1Name{
+    color: lawngreen;
+    text-align: center;
+    font-size: 30px;
+}
+
+#team2Name{
+    color: orange;
+    text-align: center;
+    font-size: 30px;
+}
+
+input[type="text"] {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#theRoundDetails{
+    text-align: center;
+
+}
+
+#t1Score{
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    font-weight: bold;
+}
+
+#t2Score{
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+    font-weight: bold;
+}
+
+
+
+#nextGame{
+    background-color: #DADBBF;
+    color: black;
+    border-radius: 9px;
+    font-family: Calibri, serif;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 28px 39px;
+    margin: auto;
+}
+
+#nextGame {
+    display: block;
+    margin: 0 auto;
+}
+
+.containerDiv {
+    text-align: center;
+}
+
+#goalT1, #goalT2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#goalT2 {
+    margin-left: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

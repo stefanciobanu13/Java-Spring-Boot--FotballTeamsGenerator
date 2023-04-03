@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <br>
+  <br>
+  <h2>Update Player data</h2>
+
+  <link th:href="@{/css/page.css}" rel="stylesheet" />
+
+
+</head>
+<body>
+
+<!-- the logout link -->
+<a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"class="logout-link">
+  Logout
+</a>
+<form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
+  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
+
+<div id="giveInput">
+  <form th:action="@{/updatePlayer}" th:object="${player}" method="post">
+    <br>
+    <br>
+    <br>
+
+    <!-- need to associate this data with customer id  -->
+    <input type="hidden" th:field="*{id}" />
+
+    <tr>
+      <td><label>First name:</label></td>
+      <td id="firstName"><input type="text" th:field="*{firstName}" /></td>
+    </tr>
+
+    <br>
+    <br>
+
+    <tr>
+      <td><label>Last name:</label></td>
+      <td id="lastName" ><input type="text" th:field="*{lastName}" /></td>
+    </tr>
+    <br>
+    <br>
+
+
+    <tr>
+      <td><label>Grade:</label></td>
+      <td id="grade"><input type="text" th:field="*{grade}" /></td>
+    </tr>
+    <br>
+    <br>
+
+      <tr>
+      <td><label></label></td>
+      <td> <button id="saveIt" type="submit">Save</button> </td>
+    </tr>
+  </form>
+  <br>
+  <br>
+  <p>
+    <a href="/showDbPlayers">Back </a>
+  </p>
+</div>
+</body>
+</html>

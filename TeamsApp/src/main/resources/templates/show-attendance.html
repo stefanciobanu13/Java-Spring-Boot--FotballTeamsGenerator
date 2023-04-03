@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/css/defaultpage.css}" rel="stylesheet" />
+
+
+    <title>The players of the round</title>
+</head>
+
+<body>
+
+<br>
+
+<br>
+<br>
+
+
+<div id="weapper">
+    <div id="header">
+        <h2>The players of the round</h2>
+    </div>
+</div>
+
+
+<br>
+<form th:action="@{/generateTeams}" method="get">
+    <button id="generate" type="submit">Generate Teams</button>
+</form>
+
+<br>
+
+<div id="container">
+    <div id="content">
+
+            <!-- add our HTML table here -->
+            <table>
+                <tr>
+                    <th>Nr.</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Grade</th>
+
+
+                </tr>
+                <!-- loop over and print out players -->
+                <tr th:each="player : ${players}">
+                    <td th:text="${player.id}"></td>
+                    <td th:text="${player.firstName}"></td>
+                    <td th:text="${player.lastName}"></td>
+                    <td th:text="${player.grade}"></td>
+
+                </tr>
+            </table>
+            <br/><br/>
+
+
+    </div>
+</div>
+<br>
+
+<a href="/showFormForAdd">Back</a>
+<br>
+<br>
+<br>
+</body>
+</html>
