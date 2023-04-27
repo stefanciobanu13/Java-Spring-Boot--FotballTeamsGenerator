@@ -11,10 +11,10 @@ import java.util.List;
 @Component
 public class Standings {
 
-    private Team p1;
-    private Team p2;
-    private Team p3;
-    private Team p4;
+    private static Team p1;
+    private static Team p2;
+    private static Team p3;
+    private static Team p4;
 
 
     //contructors
@@ -43,20 +43,24 @@ public class Standings {
         theTeams.add(orange);
         theTeams.add(blue);
         theTeams.add(gray);
-
+        //compare the teams through the number of points
         Collections.sort(theTeams, new comparatorTeams());
-
-        //seting up the conditions for the teams with equal points
-
-
         this.p1 = theTeams.get(3);
         this.p2 = theTeams.get(2);
         this.p3= theTeams.get(1);
         this.p4= theTeams.get(0);
 
-
-
         return theTeams;
+    }
+
+    //get all positions
+    public List<Team> getStandings(){
+        List<Team> standings = new ArrayList<>();
+        standings.add(p1);
+        standings.add(p2);
+        standings.add(p3);
+        standings.add(p4);
+        return standings;
     }
 
 

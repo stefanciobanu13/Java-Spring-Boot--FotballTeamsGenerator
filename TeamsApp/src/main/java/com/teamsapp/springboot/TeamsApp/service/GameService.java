@@ -19,7 +19,11 @@ public interface GameService {
 
     public Game findByRoundId(int roundId);
 
-    public Game findByTeamsIds(int team1Id, int team2Id);
+    public Game findByTeamsIdsG1(int team1Id, int team2Id);
+
+    public Game findByTeamsIdsG2(int team1Id, int team2Id);
+
+    public List<Game> getWinsOfTeam1VsTeam2(int team1Id, int team2Id);
 
 
 

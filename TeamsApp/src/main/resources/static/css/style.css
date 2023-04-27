@@ -76,6 +76,7 @@ td:first-child {
  box-shadow: inset 1px 0 0 #fff;
 }
 
+
 td:last-child {
  border-right: 1px solid #e8e8e8;
  box-shadow: inset -1px 0 0 #fff;

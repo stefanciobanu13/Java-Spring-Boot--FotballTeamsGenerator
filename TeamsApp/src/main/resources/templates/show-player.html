@@ -12,23 +12,19 @@
 
 <body>
 
-<!-- the logout link-->
-<a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"class="logout-link">
-  Logout
-</a>
-<form id="logout-form" th:action="@{/logout}" method="post" style="display: none;">
-  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-</form>
-
+<br>
 
 <div id="weapper">
   <div id="header">
     <h2>Players List</h2>
   </div>
 </div>
+<br>
+<br>
+<h2 id="selectMessage">  Please select 24 players*</h2>
 <div id="container">
   <div id="content">
-    <form action="/submitAttendance" method="post">
+    <form th:action="@{/submitAttendance}" method="post">
       <!-- add our HTML table here -->
       <table>
         <tr>

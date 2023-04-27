@@ -1,40 +1,30 @@
-package com.teamsapp.springboot.TeamsApp.entity;
-
+package com.teamsapp.springboot.TeamsApp.model;
 
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Component
-@Entity
-@Table(name="player")
-public class Player {
+public class PlayerM {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private int id;
 
-    @Column(name="first_name")
     @NotNull(message = "First name should not be null")
     private String firstName;
 
-    @Column(name="last_name")
     @NotNull(message = "Last name should not be null")
     private String lastName;
 
-    @Column(name="grade")
     private double grade;
 
-    public Player(String firstName, String lastName, double grade) {
+    public PlayerM(String firstName, String lastName, double grade) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.grade = grade;
     }
 
 
-    public Player() {}
+    public PlayerM() {}
 
 
     public String getFirstName() {

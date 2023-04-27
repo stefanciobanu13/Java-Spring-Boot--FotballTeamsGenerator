@@ -2,11 +2,12 @@ package com.teamsapp.springboot.TeamsApp.model;
 
 import com.teamsapp.springboot.TeamsApp.entity.Player;
 
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 
 public class Attendance {
 
-
+    @Size(min = 24, max = 24, message = "The list should contain exactly 24 players")
     private static ArrayList<Player> players;
 
 

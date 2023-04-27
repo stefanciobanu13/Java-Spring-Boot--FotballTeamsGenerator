@@ -22,7 +22,9 @@ public class GameCounter {
         return gameCounter;
     }
 
-
+    public static void resetTheCounter(){
+        gameCounter=0;
+    }
     public static void increaseCounter(){
         gameCounter= gameCounter +1;
     }

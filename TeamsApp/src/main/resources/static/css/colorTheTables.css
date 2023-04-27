@@ -159,6 +159,18 @@ input[type="text"] {
     margin: auto;
 }
 
+#button{
+    background-color: #DADBBF;
+    color: black;
+    border-radius: 9px;
+    font-family: Calibri, serif;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 28px 39px;
+    margin: auto;
+}
+
+
 #nextGame {
     display: block;
     margin: 0 auto;

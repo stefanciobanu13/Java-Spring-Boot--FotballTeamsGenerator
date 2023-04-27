@@ -71,9 +71,6 @@ public class Team {
     }
 
 
-
-
-
     //constructors
     public Team() {
     }
@@ -98,6 +95,8 @@ public class Team {
 
 
     public int getGoalsSituation() {
+
+        goalsSituation = scoredGoals - goalsReceived;
         return goalsSituation;
     }
 

@@ -39,6 +39,9 @@ public class GamesStore {
     private Game game10;
     private Game game11;
     private Game game12;
+    private Game smallFinal;
+    private Game bigFinal;
+
 
     private List<Game> gamesList;
 
@@ -83,14 +86,11 @@ public List<Game> getTheGames(){
 }
 
 
-
 //a method which saves the curernt game back in the store
     public void storeCurrentGame(Game theGame, int index){
             gamesList.set(index,theGame);
 
     }
-
-
 
 //resets the teams from the games
     public void resetGames(){
@@ -108,9 +108,23 @@ public List<Game> getTheGames(){
          Game game12 = new Game();
     }
 
-
 //getters and setters
 
+    public Game getSmallFinal() {
+        return smallFinal;
+    }
+
+    public void setSmallFinal(Game smallFinal) {
+        this.smallFinal = smallFinal;
+    }
+
+    public Game getBigFinal() {
+        return bigFinal;
+    }
+
+    public void setBigFinal(Game bigFinal) {
+        this.bigFinal = bigFinal;
+    }
 
     public Game getGame1() {
         return game1;

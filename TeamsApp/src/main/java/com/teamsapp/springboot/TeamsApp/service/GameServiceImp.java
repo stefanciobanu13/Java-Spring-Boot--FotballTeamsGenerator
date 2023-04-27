@@ -47,11 +47,19 @@ public class GameServiceImp implements GameService{
 
             return gameDAO.findByRoundId(roundId);
     }
-
     @Override
-    public Game findByTeamsIds(int team1Id, int team2Id) {
-        return gameDAO.findByTeamsIds(team1Id,team2Id);
+    public Game findByTeamsIdsG1(int team1Id, int team2Id) {
+        return gameDAO.findByTeamsIdsG1(team1Id,team2Id);
     }
 
+    @Override
+    public Game findByTeamsIdsG2(int team1Id, int team2Id) {
+        return gameDAO.findByTeamsIdsG2(team1Id,team2Id);
+    }
+
+    @Override
+    public List<Game> getWinsOfTeam1VsTeam2(int team1Id, int team2Id) {
+        return gameDAO.getWinsOfTeam1VsTeam2(team1Id,team2Id);
+    }
 
 }

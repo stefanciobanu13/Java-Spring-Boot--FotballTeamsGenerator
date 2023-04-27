@@ -2,6 +2,7 @@ package com.teamsapp.springboot.TeamsApp.entity;
 
 import org.springframework.stereotype.Component;
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Component
@@ -26,6 +27,7 @@ public class Round {
     @Column(name = "id")
     private int id;
 
+    @Pattern(regexp = "^\\d{2}\\.\\d{2}\\.\\d{4}$", message = "Date must be in the format day.month.year")
     @Column(name = "date")
     private String date;
 

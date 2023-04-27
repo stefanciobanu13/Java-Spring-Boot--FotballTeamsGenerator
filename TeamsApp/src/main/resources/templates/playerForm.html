@@ -31,10 +31,7 @@
 <form th:object="${player}" th:action="@{/savePlayer}" method="post">
 
 	<div id="put-input">
-		<tr>
-			<td><label>Id:</label></td>
-			<td><input type="text" th:field="*{id}" /></td>
-		</tr>
+
 
 		<tr>
 			<td><label>First name:</label></td>
@@ -69,7 +66,7 @@
 
 
 	<!-- put new button: Show Players  -->
-	<div id="click-buttons"><input id="showPlayers" type = "button" value="Show Players"
+	<div id="click-buttons"><input id="showPlayers" type = "button" value="Generate teams"
 								   onclick="window.location.href= 'showPlayers';return false"
 								   class = "add-button"
 	/>

@@ -4,11 +4,8 @@ import com.teamsapp.springboot.TeamsApp.entity.*;
 import com.teamsapp.springboot.TeamsApp.model.*;
 import com.teamsapp.springboot.TeamsApp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,19 +22,16 @@ public class Controller {
     private RoundService roundService;
     @Autowired
     private Configurator configurator;
-
     @Autowired
     private GoalService goalService;
-
     @Autowired
     private GameService gameService;
-
     @Autowired
     private Standings standings;
-
     @Autowired
     private GameCounter gameCounter;
-
+    @Autowired
+    private SmallFinalService smallFinalService;
 
 
     @GetMapping("/home")
@@ -216,6 +210,7 @@ public class Controller {
 
         //configure the games
         GamesStore gamesStore = GamesStore.getInstance();
+        gamesStore.resetGames();
         gamesStore.configureTheGames(theRound);
 
         //get the first game
@@ -288,18 +283,16 @@ public class Controller {
 
         int theId = scorerId;
         Player scorer = playerService.getPlayer(theId);
-        System.out.println("the scorer of team1 is" + " " + scorer);
         //get the current game
         GamesStore gamesStore  = GamesStore.getInstance();
         int gameCounter = GameCounter.getTheCounter();
         //use the gameCounter to get the curent game from the list of games
         Game currentGame = gamesStore.getTheGames().get(gameCounter);
         for (Player p : currentGame.getTeam1().getThePlayers()){
-                if(scorer.getId() == p.getId()){
-                    currentGame.goalTeam1(scorer);
-                }
+            if(scorer.getId() == p.getId()){
+                currentGame.goalTeam1(scorer);
+            }
         }
-
         //getting the teams from the store
         TeamsStore teamsStore = TeamsStore.getInstance();
         Team Green = teamsStore.getTeam1();
@@ -320,18 +313,19 @@ public class Controller {
         Team teamGray = teamsStore.getTeam4();
 
         Standings standings1 = new Standings(teamGreen,teamOrange,teamBlue,teamGray);
+        List<Team> positions = standings1.refreshStandings();
 
         //retrieve the teams and their position
-        Team p1 = standings1.getP1();
-        Team p2 = standings1.getP2();
-        Team p3 = standings1.getP3();
-        Team p4 = standings1.getP4();
-        //pass the to modelss
+        Team p1 = positions.get(3);
+        Team p2 = positions.get(2);
+        Team p3 = positions.get(1);
+        Team p4 = positions.get(0);
+
+        //pass the to models
         model.addAttribute("p1",p1);
         model.addAttribute("p2",p2);
         model.addAttribute("p3",p3);
         model.addAttribute("p4",p4);
-
         //storing all the data in models
         model.addAttribute("teamGreen",teamGreen);
         model.addAttribute("teamOrange",teamOrange);
@@ -339,8 +333,6 @@ public class Controller {
         model.addAttribute("teamGray",teamGray);
         model.addAttribute("currentGame",currentGame);
         model.addAttribute("scorersT1",scorersT1);
-
-
 
         return "roundForm";
     }
@@ -365,7 +357,6 @@ public class Controller {
         //store it back in the store
         gamesStore.storeCurrentGame(currentGame,gameCounter);
 
-
         //getting the teams from the store
         TeamsStore teamsStore = TeamsStore.getInstance();
         Team Green = teamsStore.getTeam1();
@@ -388,21 +379,20 @@ public class Controller {
 
         Team teamGray = teamsStore.getTeam4();
 
+
         Standings standings1 = new Standings(teamGreen,teamOrange,teamBlue,teamGray);
+        List<Team> positions = standings1.refreshStandings();
 
         //retrieve the teams and their position
-        Team p1 = standings1.getP1();
-        Team p2 = standings1.getP2();
-        Team p3 = standings1.getP3();
-        Team p4 = standings1.getP4();
+        Team p1 = positions.get(3);
+        Team p2 = positions.get(2);
+        Team p3 = positions.get(1);
+        Team p4 = positions.get(0);
         //pass the to models
         model.addAttribute("p1",p1);
         model.addAttribute("p2",p2);
         model.addAttribute("p3",p3);
         model.addAttribute("p4",p4);
-        System.out.println("the color  of  p1 is" + p1.getColor());
-
-
         //storing all the data in models
         model.addAttribute("teamGreen",teamGreen);
         model.addAttribute("teamOrange",teamOrange);
@@ -412,13 +402,14 @@ public class Controller {
         model.addAttribute("scorersT1",scorersT1);
         model.addAttribute("scorersT2",scorersT2);
 
-
         return "roundForm";
     }
 
 
     @GetMapping("/nextGame")
     public String nextGame(Model model){
+
+        String viewPage = "roundForm";
 
         //save the current game into the database
         GamesStore gamesStore = GamesStore.getInstance();
@@ -427,9 +418,16 @@ public class Controller {
         int gameCounter = GameCounter.getTheCounter();
         Game currentGame = theGames.get(gameCounter);
         gamesStore.storeCurrentGame(currentGame,gameCounter);
+        //set up the winner
+        if(currentGame.getScore_team1()>currentGame.getScore_team2()){
+            currentGame.setWinner(currentGame.getTeam1().getId());
+        }else{
+            if (currentGame.getScore_team2() > currentGame.getScore_team1()) {
+                currentGame.setWinner(currentGame.getTeam2().getId());
+            }
+        }
         //persist the game
         gameService.saveGame(currentGame);
-
         //give the points to the teams
         if(currentGame.getScore_team1() >currentGame.getScore_team2() ){
             setVictoryPoints(currentGame.getTeam1());
@@ -442,11 +440,10 @@ public class Controller {
         }
 
         //get the game back including the id
-        Game theCurrentGame = gameService.findByTeamsIds(currentGame.getTeam1().getId(),currentGame.getTeam2().getId());
+        Game theCurrentGame = gameService.findByTeamsIdsG1(currentGame.getTeam1().getId(),currentGame.getTeam2().getId());
 
         //increase the game counter
         GameCounter.increaseCounter();
-
         //create the goals and save them in db
         for(Player p : currentGame.getGoalScorersT1()){
             Goal goalT1 = new Goal(theCurrentGame,theCurrentGame.getTeam1(),p);
@@ -471,20 +468,11 @@ public class Controller {
         //substract the scored goals from the recieved ones, on every team
         substractTheGoals(Green,Orange,Blue,Gray);
 
-
         //get the teams from the store again(including the goals scored)
         Team teamGreen = teamsStore.getTeam1();
-        System.out.println("FROM STORE green scored " + " "+ teamGreen.getScoredGoals());
-
         Team teamOrange = teamsStore.getTeam2();
-        System.out.println("FROM STORE orange scored " + " "+ teamOrange.getScoredGoals());
-
         Team teamBlue = teamsStore.getTeam3();
-        System.out.println("FROM STORE blue scored " + " "+ teamBlue.getScoredGoals());
-
         Team teamGray = teamsStore.getTeam4();
-        System.out.println("FROM STORE gray scored " + " "+ teamGray.getScoredGoals());
-
         //set the standings
         Standings standings = new Standings(teamGreen,teamOrange,teamBlue,teamGray);
         List<Team> theTeams =  standings.refreshStandings();
@@ -494,40 +482,260 @@ public class Controller {
         Team p2 = standings.getP2();
         Team p3 = standings.getP3();
         Team p4 = standings.getP4();
+        //tie brake
+        tieBrake(p1,p2);
+        tieBrake(p3,p4);
 
         //pass the to models
         model.addAttribute("p1",p1);
-        System.out.println("the color of p1 is " + "" + p1.getColor());
         model.addAttribute("p2",p2);
-        System.out.println("the color of p2 is " + "" + p2.getColor());
-
         model.addAttribute("p3",p3);
-        System.out.println("the color of p3 is " + "" + p3.getColor());
-
         model.addAttribute("p4",p4);
-        System.out.println("the color of p4 is " + "" + p4.getColor());
-
         model.addAttribute("theTeams",theTeams);
+        int gameCounter3 = GameCounter.getTheCounter();
+        if(gameCounter3 <= 11) {
 
+            Game nextGame = gamesStore.getTheGames().get(gameCounter3);
+            List<Player> scorersT1 = nextGame.getGoalScorersT1();
+            List<Player> scorersT2 = nextGame.getGoalScorersT2();
+            model.addAttribute("currentGame", nextGame);
+            model.addAttribute("scorersT1", scorersT1);
+            model.addAttribute("scorersT2", scorersT2);
+        }
+        model.addAttribute("teamGreen", teamGreen);
+        model.addAttribute("teamOrange", teamOrange);
+        model.addAttribute("teamBlue", teamBlue);
+        model.addAttribute("teamGray", teamGray);
 
-        int gameCounter2 = GameCounter.getTheCounter();
-        Game nextGame = gamesStore.getTheGames().get(gameCounter2);
+        if(gameCounter3==12){
+            viewPage= "standings";
+            //tie brake
+            tieBrake(p1,p2);
+            tieBrake(p3,p4); //retrieve the teams and their position
+            Team p1Team = standings.getP1();
+            Team p2Team = standings.getP2();
+            Team p3Team = standings.getP3();
+            Team p4Team = standings.getP4();
+            model.addAttribute("p1T",p1Team);
+            model.addAttribute("p2T",p2Team);
+            model.addAttribute("p3T",p3Team);
+            model.addAttribute("p4T",p4Team);
+            System.out.println("P2 is" + " " + p1Team.getColor());
+        }
 
-        List<Player> scorersT1  = nextGame.getGoalScorersT1();
-        List<Player> scorersT2  = nextGame.getGoalScorersT2();
-
-        model.addAttribute("teamGreen",teamGreen);
-        model.addAttribute("teamOrange",teamOrange);
-        model.addAttribute("teamBlue",teamBlue);
-        model.addAttribute("teamGray",teamGray);
-        model.addAttribute("currentGame",nextGame);
-        model.addAttribute("scorersT1",scorersT1);
-        model.addAttribute("scorersT2",scorersT2);
-
-        return "roundForm";
+        return viewPage;
     }
 
 
+    @GetMapping("/smallFinal")
+    public String smallFinal(Model model){
+
+        //retrieve the teams and their position
+        Team p1 = standings.getP1();
+        Team p2 = standings.getP2();
+        Team p3 = standings.getP3();
+        Team p4 = standings.getP4();
+        //get an instance of the game Store
+        GamesStore store = GamesStore.getInstance();
+        //tie brake if necessary
+        tieBrake(p1,p2);
+        tieBrake(p3,p4);
+        //add the teams to the model
+        model.addAttribute("p1Team",standings.getStandings().get(0));
+        model.addAttribute("p2Team",standings.getStandings().get(1));
+        model.addAttribute("p3Team",standings.getStandings().get(2));
+        model.addAttribute("p4Team",standings.getStandings().get(3));
+        //get the round
+        GamesStore gamesStore = GamesStore.getInstance();
+        //configure the finals
+        store.setSmallFinal(new Game(standings.getStandings().get(2),standings.getStandings().get(3),gamesStore.getGame1().getRound()));
+        //get the small final game
+        Game smallFinal = store.getSmallFinal();
+        model.addAttribute("smallFinal",smallFinal);
+        List<Player> thePlayers1 = smallFinal.getTeam1().getThePlayers();
+        List<Player> thePlayers2 = smallFinal.getTeam2().getThePlayers();
+        model.addAttribute("thePlayers1",thePlayers1);
+        model.addAttribute("thePlayers2",thePlayers2);
+
+        model.addAttribute("team1",smallFinal.getTeam1());
+        model.addAttribute("team2",smallFinal.getTeam2());
+
+        return "smallFinal";
+    }
+
+    @GetMapping("/bigFinal")
+    public String bigFinal(Model model){
+        //increase the game counter
+        GameCounter.increaseCounter();
+
+        //save the current game into the database
+        GamesStore gamesStore = GamesStore.getInstance();
+        Game smallFinal = gamesStore.getSmallFinal();
+        //set up the winner
+        if(smallFinal.getScore_team1()>smallFinal.getScore_team2()){
+            smallFinal.setWinner(smallFinal.getTeam1().getId());
+        }else{
+            if (smallFinal.getScore_team2() > smallFinal.getScore_team1()) {
+                smallFinal.setWinner(smallFinal.getTeam2().getId());
+            }
+        }
+        //persist the small final game
+        gameService.saveGame(smallFinal);
+        //get the game back including id
+        Game tempSmallFinal = gameService.findByRoundId(smallFinal.getRound().getId());
+        //create and save the small Final instance
+        SmallFinal theSmallFinal = new SmallFinal(tempSmallFinal,tempSmallFinal.getRound());
+        smallFinalService.saveSmallFinal(theSmallFinal);
+
+        //retrieve the teams and their position
+        Team p1 = standings.getP1();
+        Team p2 = standings.getP2();
+        Team p3 = standings.getP3();
+        Team p4 = standings.getP4();
+        //add the teams to the model
+        model.addAttribute("p1Team",standings.getStandings().get(0));
+        model.addAttribute("p2Team",standings.getStandings().get(1));
+        model.addAttribute("p3Team",standings.getStandings().get(2));
+        model.addAttribute("p4Team",standings.getStandings().get(3));
+
+        //configure the big final
+        gamesStore.setBigFinal(new Game(standings.getStandings().get(0),standings.getStandings().get(1),smallFinal.getRound()));
+        Game bigFinals = gamesStore.getBigFinal();
+        model.addAttribute("currentGame",bigFinals);
+
+        return "bigFinal";
+    }
+
+    //a method for when t1 scores in a final
+    @PostMapping("/t1GoalSF")
+    public String t1GoalSF(@RequestParam("scorerId") int scorerId, Model model){
+
+        String viewPage = "smallFinal";
+        //get the scorer from database
+        Player scorer =playerService.getPlayer(scorerId);
+        //get the currentGame and store the goal
+        int gameCounter = GameCounter.getTheCounter();
+        System.out.println("the game counter in  the small final is " + " " + gameCounter);
+        GamesStore gamesStore =GamesStore.getInstance();
+        //define a current game variable
+        Game currentGame = new Game();
+        if(gameCounter==12){
+             currentGame = gamesStore.getSmallFinal();
+            for (Player p : currentGame.getTeam1().getThePlayers()){
+                if(scorer.getId() == p.getId()){
+                    currentGame.goalTeam1(scorer);
+                }
+            }
+        }else{
+            if(gameCounter==13){
+                viewPage = "bigFinal";
+                 currentGame = gamesStore.getBigFinal();
+                for (Player p : currentGame.getTeam1().getThePlayers()){
+                    if(scorer.getId() == p.getId()){
+                        currentGame.goalTeam1(scorer);
+                    }
+                }
+            }
+        }
+        //retrieve the teams and their position
+        Team p1 = standings.getP1();
+        Team p2 = standings.getP2();
+        Team p3 = standings.getP3();
+        Team p4 = standings.getP4();
+        //add the p3 and p4 teams to the model
+        model.addAttribute("p1Team",standings.getStandings().get(0));
+        model.addAttribute("p2Team",standings.getStandings().get(1));
+        model.addAttribute("p3Team",standings.getStandings().get(2));
+        model.addAttribute("p4Team",standings.getStandings().get(3));
+        model.addAttribute("smallFinal",currentGame);
+
+        return viewPage;
+    }
+
+    //a method for when t2 scores in a final
+    @PostMapping("/t2GoalSF")
+    public String t2GoalSF(@RequestParam("scorerId") int scorerId, Model model){
+
+        String viewPage = "smallFinal";
+        //get the scorer from database
+        Player scorer =playerService.getPlayer(scorerId);
+        //get the currentGame and store the goal
+        int gameCounter = GameCounter.getTheCounter();
+        //define a current game variable
+        Game currentGame = new Game();
+        GamesStore gamesStore =GamesStore.getInstance();
+        if(gameCounter==12){
+             currentGame = gamesStore.getSmallFinal();
+            for (Player p : currentGame.getTeam2().getThePlayers()){
+                if(scorer.getId() == p.getId()){
+                    currentGame.goalTeam2(scorer);
+                }
+            }
+        }else{
+            if(gameCounter==13){
+                viewPage = "bigFinal";
+                 currentGame = gamesStore.getBigFinal();
+                for (Player p : currentGame.getTeam2().getThePlayers()){
+                    if(scorer.getId() == p.getId()){
+                        currentGame.goalTeam2(scorer);
+                    }
+                }
+            }
+        }
+        //retrieve the teams and their position
+        Team p1 = standings.getP1();
+        Team p2 = standings.getP2();
+        Team p3 = standings.getP3();
+        Team p4 = standings.getP4();
+        //add the p3 and p4 teams to the model
+        model.addAttribute("p1Team",standings.getStandings().get(0));
+        model.addAttribute("p2Team",standings.getStandings().get(1));
+        model.addAttribute("p3Team",standings.getStandings().get(2));
+        model.addAttribute("p4Team",standings.getStandings().get(3));
+        model.addAttribute("smallFinal",currentGame);
+
+        return viewPage;
+    }
+
+    public void tieBrake(Team p1,Team p2){
+
+        if (p1.getPoints() == p2.getPoints()) {
+            List<Game> wins = gameService.getWinsOfTeam1VsTeam2(p1.getId(),p2.getId());
+            ArrayList<Game>theWins = (ArrayList<Game>) wins;
+            int p1Wins = 0;
+            int p2Wins =0;
+            for(Game g:theWins) {
+                if (g.getWinner() == p1.getId()) {
+                    p1Wins++;
+                }
+                else{
+                    if(g.getWinner()==p2.getId()){
+                        p2Wins++;
+                    }
+                }
+            }
+            if(p2Wins > p1Wins){
+                standings.setP1(p2);
+                standings.setP2(p1);
+            }else{
+                if(p1Wins == p2Wins){
+                    if (p2.getGoalsSituation() > p1.getGoalsSituation()) {
+                        standings.setP1(p2);
+                        standings.setP2(p1);
+                    }
+                    else {
+                        if (p1.getGoalsSituation() == p2.getGoalsSituation()) {
+                            if (p2.getScoredGoals() > p1.getScoredGoals()) {
+                                standings.setP1(p2);
+                                standings.setP2(p1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
     public Team setVictoryPoints(Team team){
 
         //add the points
@@ -634,43 +842,31 @@ public class Controller {
     }
     public void setReceivedGoals(Team green, Team orange, Team blue, Team gray){
 
-
         TeamsStore teamsStore = TeamsStore.getInstance();
         int goalsGreen = goalService.getReceivedGoals(green.getId());
-        System.out.println("Number of goals received by team Green is"+ " " + goalsGreen);
         Team teamGreen = green;
         teamGreen.setGoalsReceived(goalsGreen);
         teamsStore.storeTeam1(teamGreen);
 
         int goalsOrange = goalService.getReceivedGoals(orange.getId());
-        System.out.println("Number of goals received by team Orange is"+ " " + goalsOrange);
         Team teamOrange = orange;
         teamOrange.setGoalsReceived(goalsOrange);
         teamsStore.storeTeam2(teamOrange);
 
         int goalsBlue = goalService.getReceivedGoals(blue.getId());
-        System.out.println("Number of goals received by team Blue is"+ " " + goalsBlue);
         Team teamBlue = blue;
         teamBlue.setGoalsReceived(goalsBlue);
         teamsStore.storeTeam3(teamBlue);
 
         int goalsGray = goalService.getReceivedGoals(gray.getId());
-        System.out.println("Number of goals received by team Gray is"+ " " + goalsGray);
         Team teamGray = gray;
         teamGray.setGoalsReceived(goalsGray);
         teamsStore.storeTeam4(teamGray);
-
 
         Team Green = teamsStore.getTeam1();
         Team Orange = teamsStore.getTeam2();
         Team Blue = teamsStore.getTeam3();
         Team Gray = teamsStore.getTeam4();
-        System.out.println("After storing and geting, green scored" + " "  + Green.getScoredGoals()  + " " + "and recieved" + Green.getGoalsReceived());
-        System.out.println("After storing and geting, orange scored" + " "  + Orange.getScoredGoals()  + " " + "and recieved" + Orange.getGoalsReceived());
-        System.out.println("After storing and geting, blue scored" + " "  + Blue.getScoredGoals()  + " " + "and recieved" + Blue.getGoalsReceived());
-        System.out.println("After storing and geting, gray scored" + " "  + Gray.getScoredGoals()  + " " + "and recieved" + Gray.getGoalsReceived());
-
-
 
     }
 

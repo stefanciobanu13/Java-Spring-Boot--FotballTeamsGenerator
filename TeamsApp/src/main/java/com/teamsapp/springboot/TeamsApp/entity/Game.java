@@ -18,6 +18,9 @@ public class Game {
     @JoinColumn(name = "team1_id")
     private Team team1;
 
+   @Column(name = "winner")
+    private int winner;
+
     @Transient
     private ArrayList<Player> goalScorersT1 = new ArrayList<>();
     @Transient
@@ -84,6 +87,13 @@ public class Game {
     //getters and setters
 
 
+    public int getWinner() {
+        return winner;
+    }
+
+    public void setWinner(int winner) {
+        this.winner = winner;
+    }
 
     public int getScore_team1() {
         return score_team1;
